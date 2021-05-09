@@ -201,15 +201,23 @@ export class Workbench {
       },
     });
 
-    this.appendMenuItem(MenuId.MenubarFileMenu, {
-      // Z to be the last item after vscode group 4
-      group: '4_zsandbox',
-      order: 1,
-      command: {
-        id: 'codesandbox.sandbox.fork',
-        title: '&&Fork Sandbox',
-      },
-    });
+    if (
+      !(
+        this.controller.getState().editor?.currentSandbox?.teamId ===
+          this.controller.getState().activeTeam &&
+        this.controller.getState().activeWorkspaceAuthorization === 'READ'
+      )
+    ) {
+      this.appendMenuItem(MenuId.MenubarFileMenu, {
+        // Z to be the last item after vscode group 4
+        group: '4_zsandbox',
+        order: 1,
+        command: {
+          id: 'codesandbox.sandbox.fork',
+          title: '&&Fork Sandbox',
+        },
+      });
+    }
 
     if (
       this.controller.getState().editor?.currentSandbox?.permissions
