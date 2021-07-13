@@ -177,6 +177,7 @@ export default class Manager implements IEvaluator {
   version: string;
 
   esmodules: Map<string, Promise<string>>;
+  asyncModuleResolutions: Map<string, Promise<Module>> = new Map();
 
   constructor(
     id: string,
@@ -734,18 +735,47 @@ export default class Manager implements IEvaluator {
     return p;
   }
 
-  // ALWAYS KEEP THIS METHOD IN SYNC WITH SYNC VERSION
-  async resolveModuleAsync({
-    path,
-    parentPath = '/',
-    query = '',
-    defaultExtensions = DEFAULT_EXTENSIONS,
-  }: {
+  resolveModuleAsync(opts: {
     path: string;
     parentPath?: string;
     query?: string;
     defaultExtensions?: Array<string>;
   }): Promise<Module> {
+    const {
+      path,
+      parentPath = '/',
+      query = '',
+      defaultExtensions = DEFAULT_EXTENSIONS,
+    } = opts;
+
+    const key = `${path}::${parentPath}::${query}::${defaultExtensions.join(
+      ','
+    )}`;
+
+    const promise: Promise<Module> =
+      this.asyncModuleResolutions.get(key) ||
+      this._resolveModuleAsync({
+        key,
+        path,
+        parentPath,
+        query,
+        defaultExtensions,
+      });
+    this.asyncModuleResolutions.set(key, promise);
+    return promise;
+  }
+
+  // ALWAYS KEEP THIS METHOD IN SYNC WITH SYNC VERSION
+  private async _resolveModuleAsync(opts: {
+    key: string;
+    path: string;
+    parentPath: string;
+    query: string;
+    defaultExtensions: Array<string>;
+  }): Promise<Module> {
+    const { key, path, query, defaultExtensions } = opts;
+    let parentPath = opts.parentPath;
+
     if (
       !this.preset.experimentalEsmSupport &&
       (isUrl(parentPath) || isUrl(path))
@@ -790,7 +820,7 @@ export default class Manager implements IEvaluator {
     if (cachedPath && this.transpiledModules[cachedPath]) {
       resolvedPath = cachedPath;
     } else {
-      const measureKey = `resolve-async:${path}:${parentPath}`;
+      const measureKey = `resolve-async:${key}`;
       measure(measureKey);
       const presetAliasedPath = this.getPresetAliasedPath(path);
 
@@ -1201,6 +1231,7 @@ export default class Manager implements IEvaluator {
   async updateData(modules: {
     [path: string]: Module;
   }): Promise<Array<TranspiledModule>> {
+    this.asyncModuleResolutions = new Map();
     this.transpileJobs = {};
     this.hardReload = false;
 
