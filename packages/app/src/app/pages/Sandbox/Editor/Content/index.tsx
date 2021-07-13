@@ -101,6 +101,7 @@ export const MainWorkspace: React.FC<{ theme: any }> = ({ theme }) => {
         options={options}
         hidden={hidden}
         runOnClick={state.preferences.runOnClick}
+        isReady={!state.editor.isLoading}
       />
     ),
     actions: [],

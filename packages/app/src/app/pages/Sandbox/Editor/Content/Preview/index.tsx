@@ -14,12 +14,11 @@ type Props = {
     url?: string;
   };
   runOnClick?: boolean;
+  isReady?: boolean;
 };
-export const Preview: FunctionComponent<Props> = ({
-  hidden,
-  options,
-  runOnClick,
-}) => {
+
+export const Preview: FunctionComponent<Props> = props => {
+  const { hidden, options, runOnClick, isReady = true } = props;
   const {
     preview: previewActions,
     editor: { errorsCleared, previewActionReceived, projectViewToggled },
@@ -41,7 +40,13 @@ export const Preview: FunctionComponent<Props> = ({
     preview: { initializePreview, canAddComments },
     browser,
   } = useEffects();
-  const [running, setRunning] = useState(!runOnClick);
+  const [running, setRunning] = useState(!runOnClick && isReady);
+
+  React.useEffect(() => {
+    if (isReady && !runOnClick) {
+      setRunning(true);
+    }
+  }, [isReady, runOnClick]);
 
   /**
    * Responsible for showing a message when something is happening with SSE. Only used
