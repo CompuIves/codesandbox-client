@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stats, ClearRefinements } from 'react-instantsearch/dom';
+import { Stats, ClearRefinements } from 'react-instantsearch-dom';
 
 import { ClearAllContainer } from './elements';
 

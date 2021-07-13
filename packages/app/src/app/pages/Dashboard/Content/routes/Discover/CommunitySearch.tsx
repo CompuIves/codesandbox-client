@@ -1,9 +1,14 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
-import { InstantSearch, SearchBox, Configure } from 'react-instantsearch/dom';
-import { connectHits, connectRefinementList } from 'react-instantsearch-dom';
-import { RefinementListProvided } from 'react-instantsearch-core';
+import { 
+  connectHits,
+  connectRefinementList,
+  InstantSearch,
+  SearchBox,
+  Configure,
+  RefinementListProvided
+} from 'react-instantsearch-core';
 import VisuallyHidden from '@reach/visually-hidden';
 
 import getTemplateDefinition, {

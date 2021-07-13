@@ -20,7 +20,7 @@ import {
   InstantSearch,
   PoweredBy,
   SearchBox,
-} from 'react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 
 import { useActions } from 'app/overmind';
 import { Navigation } from 'app/pages/common/Navigation';

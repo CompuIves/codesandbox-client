@@ -4,7 +4,7 @@ import Margin from '@codesandbox/common/lib/components/spacing/Margin';
 import { getSandboxName } from '@codesandbox/common/lib/utils/get-sandbox-name';
 import { sandboxUrl } from '@codesandbox/common/lib/utils/url-generator';
 import React from 'react';
-import { Hits, Pagination } from 'react-instantsearch/dom';
+import { Hits, Pagination } from 'react-instantsearch-dom';
 
 import ResultInfo from '../ResultInfo';
 import { Container } from './elements';

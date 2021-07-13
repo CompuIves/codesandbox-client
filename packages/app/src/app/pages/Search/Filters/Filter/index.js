@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Down from 'react-icons/lib/md/expand-more';
 import Up from 'react-icons/lib/md/expand-less';
-import { RefinementList } from 'react-instantsearch/dom';
+import { RefinementList } from 'react-instantsearch-dom';
 
 import { Button, Container, Title } from './elements';
 

@@ -4,8 +4,12 @@ import {
   ALGOLIA_APPLICATION_ID,
   ALGOLIA_DEFAULT_INDEX, // eslint-disable-line
 } from '@codesandbox/common/lib/utils/config';
-import { InstantSearch, Configure, Stats } from 'react-instantsearch/dom';
-import { connectStateResults } from 'react-instantsearch-dom';
+import {
+  connectStateResults,
+  InstantSearch,
+  Configure,
+  Stats,
+} from 'react-instantsearch-dom';
 import { SubHeader } from '../../elements';
 import { GlobalSearchStyles } from './elements';
 import { ExploreResultList } from './ExploreResultList';
