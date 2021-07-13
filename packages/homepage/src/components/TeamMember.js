@@ -6,14 +6,11 @@ import bas from '../assets/images/people/bas.png';
 import bogdan from '../assets/images/people/bogdan.png';
 import oskar from '../assets/images/people/oskar.png';
 import danny from '../assets/images/people/danny.png';
-import sid from '../assets/images/people/sid.jpg';
 import christian from '../assets/images/people/christian.png';
 import sanne from '../assets/images/people/sanne.png';
 import andras from '../assets/images/people/andras.png';
 import alex from '../assets/images/people/alex.jpg';
-import maurice from '../assets/images/people/maurice.jpg';
 import zeh from '../assets/images/people/zeh.png';
-import ceora from '../assets/images/people/ceora.jpg';
 import danilowoz from '../assets/images/people/danilowoz.jpg';
 import matan from '../assets/images/people/matan.png';
 import scott from '../assets/images/people/scott.png';
@@ -21,6 +18,7 @@ import kate from '../assets/images/people/kate.jpg';
 import tamas from '../assets/images/people/tamas.png';
 import jasper from '../assets/images/people/jasper.jpg';
 import joana from '../assets/images/people/joana.jpg';
+import marco from '../assets/images/people/marco.jpg';
 
 const people = [
   {
@@ -54,12 +52,6 @@ const people = [
     team: 'Design',
   },
   {
-    name: 'Siddharth Kshetrapal',
-    pic: sid,
-    color: '#F24E62',
-    team: 'Engineering',
-  },
-  {
     name: 'Christian Alfoni',
     pic: christian,
     color: '#F24E62',
@@ -84,22 +76,16 @@ const people = [
     team: 'Engineering',
   },
   {
-    name: 'Maurice Cherry',
-    pic: maurice,
-    color: '#F7A239',
-    team: 'Growth',
-  },
-  {
     name: 'Zeh Fernandes',
     pic: zeh,
     color: '#B567EB',
     team: 'Design',
   },
   {
-    name: 'Ceora Ford',
-    pic: ceora,
-    color: '#97c8d6',
-    team: 'Growth',
+    name: 'Marco Vincit',
+    pic: marco,
+    color: '#B567EB',
+    team: 'Design',
   },
   {
     name: 'Danilo Woznica',
