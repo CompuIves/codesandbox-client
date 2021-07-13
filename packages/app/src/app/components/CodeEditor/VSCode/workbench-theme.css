@@ -234,8 +234,20 @@
 .context-view.monaco-menu-container {
   font-size: 0.75rem;
 }
-
 /* Fixes https://github.com/codesandbox/codesandbox-client/issues/3882 */
 .monaco-editor .parameter-hints-widget {
   overflow-y: scroll;
+}
+
+.monaco-editor .editor--line_change {
+  border-left: 3px solid #5dcc6780;
+  margin-left: 4px;
+}
+
+.monaco-editor .editor--line_delete {
+  border: 4px solid transparent;
+  height: 0 !important;
+  border-left-color: #ad070780;
+  margin-left: 4px;
+  margin-top: -4px;
 }

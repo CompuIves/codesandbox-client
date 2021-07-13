@@ -273,6 +273,11 @@ const colors = {
     inactiveBackground: tokens.grays[700],
     inactiveForeground: tokens.grays[300],
   },
+  gitDecoration: {
+    conflictingResourceForeground: '#6c6cc4',
+    modifiedResourceForeground: '#F7A239',
+    untrackedResourceForeground: '#5DCC67',
+  },
 };
 
 const theme = {

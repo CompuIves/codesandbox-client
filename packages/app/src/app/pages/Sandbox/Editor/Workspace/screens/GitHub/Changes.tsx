@@ -1,5 +1,6 @@
 import { List, ListItem, Text } from '@codesandbox/components';
 import React from 'react';
+import { css } from '@styled-system/css';
 
 import { AddedIcon, ChangedIcon, ConflictIcon, DeletedIcon } from './Icons';
 
@@ -14,19 +15,37 @@ export const Changes: React.FC<{
   <List paddingBottom={6}>
     {getChanges(added).map(change => (
       <ListItem gap={2}>
-        {conflicts.includes(change) ? <ConflictIcon /> : <AddedIcon />}{' '}
+        {conflicts.includes(change) ? (
+          <ConflictIcon />
+        ) : (
+          <AddedIcon
+            css={css({ color: 'gitDecoration.untrackedResourceForeground' })}
+          />
+        )}{' '}
         <Text variant="muted">{change}</Text>
       </ListItem>
     ))}
     {getChanges(modified).map(change => (
       <ListItem gap={2}>
-        {conflicts.includes(change) ? <ConflictIcon /> : <ChangedIcon />}{' '}
+        {conflicts.includes(change) ? (
+          <ConflictIcon />
+        ) : (
+          <ChangedIcon
+            css={css({ color: 'gitDecoration.modifiedResourceForeground' })}
+          />
+        )}{' '}
         <Text variant="muted">{change}</Text>
       </ListItem>
     ))}
     {getChanges(deleted).map(change => (
       <ListItem gap={2}>
-        {conflicts.includes(change) ? <ConflictIcon /> : <DeletedIcon />}{' '}
+        {conflicts.includes(change) ? (
+          <ConflictIcon />
+        ) : (
+          <DeletedIcon
+            css={css({ color: 'gitDecoration.deletedResourceForeground' })}
+          />
+        )}{' '}
         <Text variant="muted">{change}</Text>
       </ListItem>
     ))}

@@ -199,7 +199,10 @@
     "list.warningForeground": "#FBCC43",
     "list.errorForeground": "#E1270E",
     "list.hoverForeground": null,
-    "list.focusForeground": null
+    "list.focusForeground": null,
+    "gitDecoration.conflictingResourceForeground": "#6c6cc4",
+    "gitDecoration.modifiedResourceForeground": "#F7A239",
+    "gitDecoration.untrackedResourceForeground": "#5DCC67"
   },
   "tokenColors": [
     {

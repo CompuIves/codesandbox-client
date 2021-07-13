@@ -166,6 +166,85 @@ export class ModelsHandler {
     });
   }
 
+  _decorations = [];
+
+  public applyLineChanges(
+    module: Module,
+    position: {
+      modifiedEndLineNumber: number;
+      modifiedStartLineNumber: number;
+      originalEndLineNumber: number;
+      originalStartLineNumber: number;
+      charChanges: [] | undefined;
+    }[]
+  ) {
+    const moduleModel = this.getModuleModelByPath(module.path);
+    if (!moduleModel?.model) return;
+    const model = moduleModel.model;
+
+    const markers = position.map(pos => {
+      const isDeletion =
+        pos.modifiedEndLineNumber !== pos.modifiedStartLineNumber &&
+        pos.originalStartLineNumber === pos.originalEndLineNumber &&
+        pos.originalEndLineNumber !== 0 &&
+        pos.originalStartLineNumber !== 0 &&
+        pos.charChanges === undefined;
+
+      /**
+       * Deletion
+       */
+      if (isDeletion) {
+        const deletedPosition = pos.modifiedStartLineNumber + 1;
+
+        return {
+          range: new window.monaco.Range(
+            deletedPosition,
+            1,
+            deletedPosition,
+            1
+          ),
+          options: {
+            isWholeLine: true,
+            linesDecorationsClassName: 'editor--line editor--line_delete',
+          },
+        };
+      }
+
+      /**
+       * Change
+       */
+      return {
+        range: new window.monaco.Range(
+          pos.modifiedStartLineNumber,
+          1,
+          pos.modifiedEndLineNumber,
+          1
+        ),
+        options: {
+          isWholeLine: true,
+          linesDecorationsClassName: 'editor--line editor--line_change',
+        },
+      };
+    });
+
+    this._decorations = model.deltaDecorations(this._decorations, markers);
+  }
+
+  public cleanMarkDecoratorDiff(module: Module) {
+    const moduleModel = this.getModuleModelByPath(module.path);
+
+    if (!moduleModel?.model) {
+      return;
+    }
+
+    const model = moduleModel.model;
+
+    this._decorations = model.deltaDecorations(this._decorations, []);
+    document
+      .querySelectorAll('.editor--line')
+      .forEach(element => element.remove());
+  }
+
   public isModuleOpened(module: Module) {
     const moduleModel = this.getModuleModelByPath(module.path);
     return Boolean(moduleModel?.model);

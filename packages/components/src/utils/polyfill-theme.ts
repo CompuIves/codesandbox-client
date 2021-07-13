@@ -39,6 +39,7 @@ const polyfillTheme = vsCodeTheme => {
     quickInput: {},
     menuList: {},
     dialog: {},
+    gitDecoration: {},
   };
 
   const type = vsCodeTheme.type || guessType(vsCodeTheme);
@@ -96,6 +97,17 @@ const polyfillTheme = vsCodeTheme => {
       uiColors.button.background || codesandboxColors.button.background,
     foreground:
       uiColors.button.foreground || codesandboxColors.button.foreground,
+  };
+
+  uiColors.gitDecoration = {
+    deletedResourceForeground:
+      uiColors.gitDecoration.deletedResourceForeground || '#ad0707',
+    conflictingResourceForeground:
+      uiColors.gitDecoration.conflictingResourceForeground || '#6c6cc4',
+    modifiedResourceForeground:
+      uiColors.gitDecoration.modifiedResourceForeground || '#F7A239',
+    untrackedResourceForeground:
+      uiColors.gitDecoration.untrackedResourceForeground || '#5DCC67',
   };
 
   // Step 3. Infer values that are not defined by vscode theme

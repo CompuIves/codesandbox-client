@@ -640,7 +640,7 @@ export const resolveOutOfSync = async ({
   git.isResolving = false;
 };
 
-export const _setGitChanges = ({ state }: Context) => {
+export const _setGitChanges = ({ state, effects }: Context) => {
   const changes: {
     added: string[];
     deleted: string[];
@@ -663,6 +663,17 @@ export const _setGitChanges = ({ state }: Context) => {
       changes.modified.push(module.path);
     }
   });
+
+  const currentModule = state.editor.currentModule;
+
+  effects.vscode.onFileDiff(
+    currentModule,
+    state.git.sourceModulesByPath[currentModule.path]!,
+    state.editor.currentSandbox!.modules.find(
+      e => e?.path === currentModule?.path
+    )!
+  );
+
   Object.keys(state.git.sourceModulesByPath).forEach(path => {
     if (!state.editor.modulesByPath[path]) {
       changes.deleted.push(path);

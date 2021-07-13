@@ -45,7 +45,11 @@
     "menubar.selectionBackground": "#ffffff10",
     "menubar.selectionForeground": "#ffffff",
     "editorGroup.dropBackground": "#ffd3991f",
-    "editorWarning.foreground": "#FFD399"
+    "editorWarning.foreground": "#FFD399",
+    "gitDecoration.deletedResourceForeground": "#ad0707",
+    "gitDecoration.conflictingResourceForeground": "#6c6cc4",
+    "gitDecoration.modifiedResourceForeground": "#F7A239",
+    "gitDecoration.untrackedResourceForeground": "#5DCC67"
   },
   "tokenColors": [
     {

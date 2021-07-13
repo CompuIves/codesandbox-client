@@ -1174,6 +1174,38 @@ export class VSCodeEffect {
     this.options.onCodeChange(data);
   };
 
+  public onFileDiff = (
+    module: Module,
+    original: { code: string; sha?: string },
+    modified: { code: string; sha?: string }
+  ) => {
+    const { DiffComputer } = window.require(
+      'vs/editor/common/diff/diffComputer'
+    );
+
+    const diff = new DiffComputer(
+      original.code.split(/\n/),
+      modified.code.split(/\n/),
+      {
+        shouldComputeCharChanges: true,
+        shouldPostProcessCharChanges: true,
+        shouldIgnoreTrimWhitespace: false,
+        shouldMakePrettyDiff: true,
+        maxComputationTime: 1000,
+      }
+    );
+    const resultDiff = diff.computeDiff();
+
+    if (
+      resultDiff.length > 0 &&
+      (original.sha !== modified.sha || original.code !== modified.code)
+    ) {
+      this.modelsHandler.applyLineChanges(module, resultDiff);
+    } else {
+      this.modelsHandler.cleanMarkDecoratorDiff(module);
+    }
+  };
+
   private onActiveEditorChange = () => {
     if (this.modelSelectionListener) {
       this.modelSelectionListener.dispose();
