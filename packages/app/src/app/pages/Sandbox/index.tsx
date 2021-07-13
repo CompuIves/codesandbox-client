@@ -23,6 +23,22 @@ export const Sandbox = React.memo<Props>(
     const state = useAppState();
     const actions = useActions();
 
+    /**
+     * !important Hard bug fix
+     *
+     * This address temporarily many unexpected
+     * behaviors that occurs when  navigating away
+     * from the editor and go back to it
+     * Eg: Editor -> Dashboard -> Editor
+     *
+     * @link https://www.notion.so/Unexpected-behaviors-when-navigating-away-from-the-editor-and-go-back-to-it-b5fcc670c3fb46afa8a57dd05f701bcb
+     */
+    useEffect(() => {
+      if (window.CSEditor) {
+        window.location.reload();
+      }
+    }, []);
+
     useEffect(() => {
       if (!showNewSandboxModal) {
         if (window.screen.availWidth < 800) {
