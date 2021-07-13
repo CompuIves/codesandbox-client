@@ -297,17 +297,25 @@ function shortcutHandler(type: string) {
 
 let listenToRuntimeErrorsUnmounter;
 
+function unregisterErrorHandlers() {
+  if (listenToRuntimeErrorsUnmounter) {
+    listenToRuntimeErrorsUnmounter();
+    listenToRuntimeErrorsUnmounter = null;
+  }
+}
+
+function uninject(force) {
+  unregisterErrorHandlers();
+  unmount(force);
+}
+
 function inject(renderErrorOverlay = true) {
+  // Remove existing listeners if there are any
+  unregisterErrorHandlers();
+
   listenToRuntimeErrorsUnmounter = listenToRuntimeErrors(error => {
     crash(error.error, false, renderErrorOverlay);
   });
-}
-
-function uninject() {
-  if (listenToRuntimeErrorsUnmounter) {
-    listenToRuntimeErrorsUnmounter();
-  }
-  unmount();
 }
 
 export { inject, uninject, unmount };

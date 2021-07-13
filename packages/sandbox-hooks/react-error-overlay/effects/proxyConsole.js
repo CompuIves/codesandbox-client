@@ -23,26 +23,26 @@ export type { ReactFrame };
 // https://github.com/facebook/react/pull/9679
 // / TODO: a more comprehensive implementation.
 
-const registerReactStack = () => {
+export function registerReactStack() {
   if (typeof console !== 'undefined') {
     // $FlowFixMe
     console.reactStack = frames => reactFrameStack.push(frames);
     // $FlowFixMe
     console.reactStackEnd = frames => reactFrameStack.pop();
-  }
-};
 
-const unregisterReactStack = () => {
-  if (typeof console !== 'undefined') {
-    // $FlowFixMe
-    console.reactStack = undefined;
-    // $FlowFixMe
-    console.reactStackEnd = undefined;
+    return () => {
+      // $FlowFixMe
+      console.reactStack = undefined;
+      // $FlowFixMe
+      console.reactStackEnd = undefined;
+    };
   }
-};
+
+  return () => {};
+}
 
 type ConsoleProxyCallback = (message: string, frames: ReactFrame[]) => void;
-const permanentRegister = function proxyConsole(
+export function permanentRegister(
   type: string,
   callback: ConsoleProxyCallback
 ) {
@@ -57,7 +57,7 @@ const permanentRegister = function proxyConsole(
           }
         } catch (err) {
           // Warnings must never crash. Rethrow with a clean stack.
-          setTimeout(function() {
+          setTimeout(function () {
             throw err;
           });
         }
@@ -65,6 +65,4 @@ const permanentRegister = function proxyConsole(
       };
     }
   }
-};
-
-export { permanentRegister, registerReactStack, unregisterReactStack };
+}

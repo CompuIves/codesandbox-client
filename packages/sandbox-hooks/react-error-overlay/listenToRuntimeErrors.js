@@ -5,25 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  register as registerError,
-  unregister as unregisterError,
-} from './effects/unhandledError';
-import {
-  register as registerPromise,
-  unregister as unregisterPromise,
-} from './effects/unhandledRejection';
-import {
-  register as registerStackTraceLimit,
-  unregister as unregisterStackTraceLimit,
-} from './effects/stackTraceLimit';
+import { registerUnhandledError } from './effects/unhandledError';
+import { registerUnhandledRejection } from './effects/unhandledRejection';
+import { registerStackTraceLimit } from './effects/stackTraceLimit';
 import {
   permanentRegister as permanentRegisterConsole,
   registerReactStack,
-  unregisterReactStack,
 } from './effects/proxyConsole';
 import { massage as massageWarning } from './utils/warnings';
-import getStackFrames from './utils/getStackFrames';
+import { getStackFrames } from './utils/getStackFrames';
 
 import type { StackFrame } from './utils/stack-frame';
 
@@ -60,10 +50,15 @@ export function listenToRuntimeErrors(
 ) {
   const crashWithFramesRunTime = crashWithFrames(crash);
 
-  registerError(window, error => crashWithFramesRunTime(error, false));
-  registerPromise(window, error => crashWithFramesRunTime(error, true));
+  const unregisterError = registerUnhandledError(window, error =>
+    crashWithFramesRunTime(error, false)
+  );
+  const unregisterUnhandledRejection = registerUnhandledRejection(
+    window,
+    error => crashWithFramesRunTime(error, true)
+  );
   registerStackTraceLimit();
-  registerReactStack();
+  const unregisterReactStack = registerReactStack();
   permanentRegisterConsole('error', (warning, stack) => {
     const data = massageWarning(warning, stack);
     crashWithFramesRunTime(
@@ -77,10 +72,9 @@ export function listenToRuntimeErrors(
     );
   });
 
-  return function stopListening() {
-    unregisterStackTraceLimit();
-    unregisterPromise(window);
-    unregisterError(window);
+  return () => {
+    unregisterUnhandledRejection();
+    unregisterError();
     unregisterReactStack();
   };
 }

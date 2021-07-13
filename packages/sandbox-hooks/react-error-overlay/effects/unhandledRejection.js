@@ -8,49 +8,30 @@
  */
 
 /* @flow */
-let boundRejectionHandler = null;
-
 type ErrorCallback = (error: Error) => void;
 
-function rejectionHandler(
-  callback: ErrorCallback,
-  e: PromiseRejectionEvent
-): void {
-  if (e == null || e.reason == null) {
-    return callback(new Error('Unknown'));
-  }
-  const { reason } = e;
-  if (reason instanceof Error) {
-    return callback(reason);
-  }
-  // A non-error was rejected, we don't have a trace :(
-  // Look in your browser's devtools for more information
-  return callback(new Error(reason));
-}
-
-function registerUnhandledRejection(
+export function registerUnhandledRejection(
   target: EventTarget,
   callback: ErrorCallback
 ) {
-  if (boundRejectionHandler !== null) {
-    // Always add the listener, in case we rewrote the window
-    // $FlowFixMe
-    target.addEventListener('unhandledrejection', boundRejectionHandler);
-    return;
-  }
-  boundRejectionHandler = rejectionHandler.bind(undefined, callback);
-}
+  const rejectionHandler = err => {
+    if (err == null || err.reason == null) {
+      return callback(new Error('Unknown'));
+    }
 
-function unregisterUnhandledRejection(target: EventTarget) {
-  if (boundRejectionHandler === null) {
-    return;
-  }
-  // $FlowFixMe
-  target.removeEventListener('unhandledrejection', boundRejectionHandler);
-  boundRejectionHandler = null;
-}
+    const { reason } = err;
+    if (reason instanceof Error) {
+      return callback(reason);
+    }
 
-export {
-  registerUnhandledRejection as register,
-  unregisterUnhandledRejection as unregister,
-};
+    // A non-error was rejected, we don't have a trace :(
+    // Look in your browser's devtools for more information
+    return callback(new Error(reason));
+  };
+  
+  target.addEventListener('unhandledrejection', rejectionHandler);
+
+  return () => {
+    target.removeEventListener('unhandledrejection', rejectionHandler);
+  };
+}

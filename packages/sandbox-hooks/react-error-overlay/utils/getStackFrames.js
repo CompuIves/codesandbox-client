@@ -11,7 +11,7 @@ import { parse } from './parser';
 import { map } from './mapper';
 import { unmap } from './unmapper';
 
-function getStackFrames(
+export function getStackFrames(
   error: Error,
   unhandledRejection: boolean = false,
   contextSize: number = 3
@@ -44,6 +44,3 @@ function getStackFrames(
     );
   });
 }
-
-export default getStackFrames;
-export { getStackFrames };
