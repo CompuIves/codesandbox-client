@@ -1,5 +1,4 @@
 export const SECOND = 1000;
-const SANDBOXES_REPO = 'codesandbox/integration-sandboxes';
 
 export function pageLoaded(page) {
   return new Promise(resolve =>
@@ -12,7 +11,7 @@ export function pageLoaded(page) {
 }
 
 function sandboxUrl(sandboxId) {
-  return `http://localhost:3000/#github/${SANDBOXES_REPO}/tree/master/${sandboxId}`;
+  return `http://localhost:3000/#github/codesandbox/integration-sandboxes/tree/master/${sandboxId}`;
 }
 
 export function loadSandbox(page, sandboxId, timeout) {

@@ -36,6 +36,7 @@ import handleExternalResources from './external-resources';
 import setScreen, { resetScreen } from './status-screen';
 import { showRunOnClick } from './status-screen/run-on-click';
 import { SCRIPT_VERSION } from '.';
+import { appendScripts, extractScripts } from './html-utils';
 
 let manager: Manager | null = null;
 let actionsEnabled = false;
@@ -75,6 +76,27 @@ function sendTestCount(modules: { [path: string]: Module }) {
     event: 'test_count',
     count: tests.length,
   });
+}
+
+function getBestHTMLEntrypointMatch(opts: {
+  entrypoints: Set<string>;
+  htmlModulePaths: Set<string>;
+  prefixes?: Array<string>;
+}): string | null {
+  const {
+    entrypoints,
+    htmlModulePaths,
+    prefixes = ['', '/public', '/src'],
+  } = opts;
+  for (const prefix of prefixes) {
+    for (const entrypoint of entrypoints) {
+      const fullPath = `${prefix}${entrypoint}`;
+      if (htmlModulePaths.has(fullPath)) {
+        return fullPath;
+      }
+    }
+  }
+  return null;
 }
 
 let firstLoad = true;
@@ -667,10 +689,23 @@ async function compile(opts: CompileOptions) {
 
       await manager.preset.preEvaluate(manager, updatedModules);
 
-      if (!manager.webpackHMR) {
-        const htmlEntries = templateDefinition.getHTMLEntries(configurations);
-        const htmlModulePath = htmlEntries.find(p => Boolean(modules[p]));
-        const htmlModule = modules[htmlModulePath];
+      // HTML Hydration and HMR
+      // If the user code handles hot module reload, we don't modify html dynamically (users can refresh the page manually in this case)
+      if (!manager?.webpackHMR) {
+        const templateHTMLEntries =
+          templateDefinition.getHTMLEntries(configurations) || [];
+        if (document.location.pathname.endsWith('.html')) {
+          templateHTMLEntries.unshift(document.location.pathname);
+        }
+        const htmlEntrypoints = new Set(templateHTMLEntries);
+        const htmlModulePaths = new Set(
+          Object.keys(modules).filter(k => k.endsWith('.html'))
+        );
+        const htmlModulePath = getBestHTMLEntrypointMatch({
+          entrypoints: htmlEntrypoints,
+          htmlModulePaths,
+        });
+        const htmlModule = htmlModulePath ? modules[htmlModulePath] : null;
         let html =
           template === 'vue-cli'
             ? '<div id="app"></div>'
@@ -683,6 +718,7 @@ async function compile(opts: CompileOptions) {
         if (lastHeadHTML && lastHeadHTML !== head) {
           document.location.reload();
         }
+
         if (manager && lastBodyHTML && lastBodyHTML !== body) {
           manager.clearCompiledCache();
         }
@@ -691,7 +727,7 @@ async function compile(opts: CompileOptions) {
         // we have to fall back to setting `document.body.innerHTML`, which isn't
         // preferred.
         const serverProvidedHTML =
-          modules[htmlEntries[0]] || manager.preset.htmlDisabled;
+          modules[htmlModulePath] || manager.preset.htmlDisabled;
         if (
           !serverProvidedHTML ||
           !firstLoad ||
@@ -701,17 +737,31 @@ async function compile(opts: CompileOptions) {
           // The HTML is loaded from the server as a static file, no need to set the innerHTML of the body
           // on the first run. However, if there's no server to provide the static file (in the case of a local server
           // or sandpack), then do it anyways.
-          document.body.innerHTML = body;
+          if (body !== lastBodyHTML) {
+            document.body.innerHTML = body;
+
+            const scripts = await extractScripts(body, true);
+            if (scripts.length) {
+              // Reload page to re-execute scripts properly...
+              if (!firstLoad) {
+                window.location.reload();
+                return;
+              }
+              appendScripts(scripts, document.body);
+            }
+          }
 
           // Add head tags or anything that comes from the template
           // This way, title and other meta tags will overwrite whatever the bundler <head> tag has.
           // At this point, the original head was parsed and the files loaded / preloaded.
+          if (head !== lastHeadHTML) {
+            document.head.innerHTML += head;
 
-          // TODO: figure out a way to fix this without overriding head changes done by the bundler
-          // Original issue: https://github.com/codesandbox/sandpack/issues/32
-          // if (document.head && head) {
-          //   document.head.innerHTML = head;
-          // }
+            const scripts = await extractScripts(head, true);
+            if (scripts.length) {
+              appendScripts(scripts, document.head);
+            }
+          }
         }
         lastBodyHTML = body;
         lastHeadHTML = head;

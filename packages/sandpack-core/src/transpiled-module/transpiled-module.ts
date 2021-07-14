@@ -1074,6 +1074,9 @@ export class TranspiledModule {
 
       return exports;
     } catch (e) {
+      // TODO: Augment error with filepath of module, we can improve the displayed error...
+      console.error(`Evaluation failed for ${this.module.path}`);
+
       e.tModule = e.tModule || transpiledModule;
 
       this.resetCompilation();
