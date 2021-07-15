@@ -263,6 +263,7 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://github.com/ryanpwaldon"><img src="https://avatars0.githubusercontent.com/u/12480362?v=4" width="100px;" alt="Ryan Waldon"/><br /><sub><b>Ryan Waldon</b></sub></a><br /><a href="https://github.com/codesandbox/codesandbox-client/commits?author=ryanpwaldon" title="Code">💻</a></td>
     <td align="center"><a href="http://cherniavskii.com"><img src="https://avatars.githubusercontent.com/u/13808724?v=4" width="100px;" alt="Andrew Cherniavskii"/><br /><sub><b>Andrew Cherniavskii</b></sub></a><br /><a href="https://github.com/codesandbox/codesandbox-client/commits?author=cherniavskii" title="Code">💻</a></td>
     <td align="center"><a href="http://nullvoxpopuli.com"><img src="https://avatars.githubusercontent.com/u/199018?v=4" width="100px;" alt="NullVoxPopuli"/><br /><sub><b>NullVoxPopuli</b></sub></a><br /><a href="https://github.com/codesandbox/codesandbox-client/commits?author=NullVoxPopuli" title="Code">💻</a> <a href="#content-NullVoxPopuli" title="Content">🖋</a> <a href="#maintenance-NullVoxPopuli" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="http://joshellis.co.uk"><img src="https://avatars.githubusercontent.com/u/37798644?v=4" width="100px;" alt="Josh"/><br /><sub><b>Josh</b></sub></a><br /><a href="https://github.com/codesandbox/codesandbox-client/commits?author=joshuaellis" title="Documentation">📖</a></td>
   </tr>
 </table>
 

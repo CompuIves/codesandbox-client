@@ -105,3 +105,7 @@ We handle auto linking of these dependencies, this means that we rewrite the
 dependencies to the newly built versions of CodeSandbox CI. In this example,
 `vue` uses `vue-template-compiler`, so we've updated `package.json` of `vue` to
 point to our built `vue-template-compiler`.
+
+## Limitations
+
+There is currently a limitation of up to 25 forked sandboxes per build. This is an anti-abuse measure.

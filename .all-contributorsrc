@@ -1634,6 +1634,15 @@
         "content",
         "maintenance"
       ]
+    },
+    {
+      "login": "joshuaellis",
+      "name": "Josh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37798644?v=4",
+      "profile": "http://joshellis.co.uk",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
